@@ -12,10 +12,10 @@ public class BranchOffice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "Branch office name", nullable = false, length = 50)
+    @Column(name = "branch_name", length = 50)
     private String name;
 
-    @Column(name = "Branch office country", nullable = false, length = 50)
+    @Column(name = "branch_country", length = 50)
     private String country;
 
     public BranchOffice(String name, String country) {
