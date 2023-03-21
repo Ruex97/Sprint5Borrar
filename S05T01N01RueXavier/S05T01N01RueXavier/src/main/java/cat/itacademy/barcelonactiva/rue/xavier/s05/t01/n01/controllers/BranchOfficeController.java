@@ -1,59 +1,43 @@
 package cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.controllers;
 
-import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.domain.BranchOffice;
-import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchOfficeDTO;
+import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchDTO;
 import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.services.IBranchOfficeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/branchoffice")
+@Controller
+//@RequestMapping("/branch")
 public class BranchOfficeController {
 
     @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
     IBranchOfficeService branchService;
 
-    @GetMapping("/getAll")
-    public ResponseEntity<List<cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchOfficeDTO>> getAllBranches(){
-
-        List<cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchOfficeDTO> branches = branchService.getAllBranches().stream().map(post -> modelMapper.map(post, cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchOfficeDTO.class))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<List<cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchOfficeDTO>>(branches, HttpStatus.OK);
+    @GetMapping("/branches")
+    public String getAllBranches(Model model){
+        model.addAttribute("branches", branchService.getAllBranches());
+        return "branches";  //  Returns html file branches.html located templates folder.
 
     }
 
 
-  /*  @PostMapping("/add")
-    public ResponseEntity<BranchOfficeDTO> createBranch(@RequestBody branchOfficeDTO) {
+    @PostMapping("/branches")
+    public String createBranch (@ModelAttribute("branchDto") BranchDTO branchDTO){
+        branchService.addBranch(branchDTO);
+        return "redirect:/branches";
 
-        // convert DTO to entity
-        BranchOffice myBranch = modelMapper.map(branchOfficeDTO, BranchOffice.class);
+    }
 
-       //  BranchOffice branch = branchService.addBranch(myBranch);
-
-        // convert entity to DTO
-        branchResponse = modelMapper.map(branch,BranchOfficeDTO.class);
-
-        return new ResponseEntity<BranchOfficeDTO>(branchResponse, HttpStatus.CREATED);
-    } */
-
-    @PostMapping("/add")
-    public ResponseEntity<BranchOfficeDTO> createBranch (@ModelAttribute BranchOfficeDTO branchOfficeDTO){
-        BranchOfficeDTO branchResponse = branchService.addBranch(branchOfficeDTO);
-
-        // OUT
-        System.out.println("Sucursal saved!");
-        return new ResponseEntity<BranchOfficeDTO>(branchResponse, HttpStatus.CREATED);
-
+    @GetMapping("/branches/new")
+    public String displayBranchCreationForm (Model model){
+        BranchDTO branchDTO = new BranchDTO();
+        model.addAttribute("branch", branchDTO); //We are passing an object branch, to assign the attributes.
+        return "create_branch";
     }
 
 

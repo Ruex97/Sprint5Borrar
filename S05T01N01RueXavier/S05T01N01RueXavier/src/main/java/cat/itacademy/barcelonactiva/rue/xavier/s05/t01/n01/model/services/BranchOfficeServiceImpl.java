@@ -1,7 +1,7 @@
 package cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.services;
 
-import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.domain.BranchOffice;
-import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchOfficeDTO;
+import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.domain.Branch;
+import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchDTO;
 import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.repository.BranchOfficeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BranchOfficeServiceImpl implements IBranchOfficeService{
@@ -20,24 +21,30 @@ public class BranchOfficeServiceImpl implements IBranchOfficeService{
 
 
     @Override
-    public List<BranchOffice> getAllBranches() {
-        return repository.findAll();
+    public List<BranchDTO> getAllBranches() {
+        return repository.findAll().stream().map(x -> entityToDto(x)).collect(Collectors.toList());
     }
 
     @Override
-    public BranchOffice getBranchById(long id) {
-        Optional<BranchOffice> branchData = repository.findById(id);
+    public BranchDTO getBranchById(long id) {
+        Optional<Branch> branchData = repository.findById(id);
+        BranchDTO branchDTO;
 
         if(branchData.isPresent()) {
-            return repository.findById(id).get();
+            Branch branch = branchData.get();
+            branchDTO = entityToDto(branch);
+        } else {
+            branchDTO = null;
         }
-        return null;
+
+        return branchDTO;
+
 
     }
 
     @Override
     public void deleteBranch(long id) {
-        Optional<BranchOffice> branchData = repository.findById(id);
+        Optional<Branch> branchData = repository.findById(id);
 
         if(branchData.isPresent()) {
             repository.deleteById(id);
@@ -46,36 +53,62 @@ public class BranchOfficeServiceImpl implements IBranchOfficeService{
     }
 
     @Override
-    public BranchOffice updateBranch(long id, BranchOffice branchOffice) {
-        Optional<BranchOffice> branchData = repository.findById(id);
+    public Branch updateBranch(long id, Branch branch) {
+
+        Optional<Branch> branchData = repository.findById(id);
 
         if(branchData.isPresent()) {
-            BranchOffice myBranch = branchData.get();
-            myBranch.setCountry(branchOffice.getCountry());
-            myBranch.setName(branchOffice.getName());
+            Branch myBranch = branchData.get();
+            myBranch.setCountry(branch.getCountry());
+            myBranch.setName(branch.getName());
 
             return repository.save(myBranch);
         } else {
-            return null;
+            return repository.save(branch);
         }
     }
 
+
     @Override
-    public BranchOfficeDTO addBranch(BranchOfficeDTO branchDto) {
-        BranchOffice branch1 = new BranchOffice();
-        BranchOffice branch2 = new BranchOffice();
-        BranchOfficeDTO branchDtoOut = new BranchOfficeDTO();
+    public Branch addBranch(BranchDTO branchDto) {
+        Branch branch = dtoToEntity(branchDto);
+        return repository.save(branch);
+    }
 
-        // From Dto to entity
-        branch1 = modelMapper.map(branchDto, BranchOffice.class);
+    public BranchDTO entityToDto(Branch branch){
 
-        // Save to db
-        branch2 = repository.save(branch1);
+        BranchDTO branchdto = new BranchDTO();
+        branchdto.setId(branch.getId());
+        branchdto.setName(branch.getName());
+        branchdto.setCountry(branch.getCountry());
 
-        // Transform from entity to Dto
-        branchDtoOut = modelMapper.map(branch2, BranchOfficeDTO.class);
+       branchdto.setTypeBranch(branchdto.checkCountry());
 
-        return branchDtoOut;
+        return branchdto;
+    }
+
+    public BranchDTO entityToDto2(Branch branch) {
+        BranchDTO myBranchDTO = modelMapper.map(branch, BranchDTO.class);
+        return myBranchDTO;
+    }
+
+    public Branch dtoToEntity2(BranchDTO branchDTO){
+        Branch myBranch = modelMapper.map(branchDTO, Branch.class);
+        return myBranch;
+
+    }
+
+
+    public Branch dtoToEntity (BranchDTO branchdto){
+        Branch branch = new Branch();
+        branch.setId(branchdto.getId());
+        branch.setName(branchdto.getName());
+        branch.setCountry(branchdto.getCountry());
+
+        return branch;
     }
 
 }
+
+
+

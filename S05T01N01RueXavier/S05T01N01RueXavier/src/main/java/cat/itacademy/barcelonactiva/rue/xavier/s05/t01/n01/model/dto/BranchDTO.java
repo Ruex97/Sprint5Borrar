@@ -1,22 +1,17 @@
-﻿package cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto;
+package cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@NoArgsConstructor
-@Getter
-@Setter
-public class BranchOfficeDTO {
+@NoArgsConstructor @AllArgsConstructor
+@Data
+public class BranchDTO {
 
     private long id;
     private String name;
@@ -29,7 +24,7 @@ public class BranchOfficeDTO {
             "Finlandia","Francia", "Grecia", "Hungría", "Irlanda", "Italia", "Letonia", "Lituania", "Luxemburgo",
             "Malta", "Países Bajos", "Polonia", "Portugal", "República Checa", "Rumania", "Suecia"));
 
-    public BranchOfficeDTO(String name, String country) {
+    public BranchDTO(String name, String country) {
         this.name = name;
         this.country = country;
         this.typeBranch = checkCountry();
