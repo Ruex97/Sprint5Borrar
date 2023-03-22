@@ -19,10 +19,10 @@ public class BranchDTO {
     private String typeBranch;
 
 
-    private static final List<String> UECOUNTRIES = new ArrayList<>(Arrays.asList("Alemania","Austria","Bélgica",
-            "Bulgaria","Chipre","Croacia", "Dinamarca", "España", "Eslovaquia", "Eslovenia", "Estonia",
-            "Finlandia","Francia", "Grecia", "Hungría", "Irlanda", "Italia", "Letonia", "Lituania", "Luxemburgo",
-            "Malta", "Países Bajos", "Polonia", "Portugal", "República Checa", "Rumania", "Suecia"));
+    private static final List<String> UECOUNTRIES = new ArrayList<>(Arrays.asList("alemania", "austria", "bélgica",
+            "bulgaria", "chipre", "croacia", "dinamarca", "españa", "eslovaquia", "eslovenia", "estonia", "finlandia",
+            "francia", "grecia", "hungría", "irlanda", "italia", "letonia", "lituania", "luxemburgo", "malta",
+            "países bajos", "polonia", "portugal", "república checa", "rumania", "suecia"));
 
     public BranchDTO(String name, String country) {
         this.name = name;
@@ -34,7 +34,7 @@ public class BranchDTO {
     public String checkCountry() {
         String type = "Outside UE";
 
-        if (UECOUNTRIES.contains(country)) {
+        if (UECOUNTRIES.contains(country.toLowerCase())) {
             type = "UE";
         }
         return type;

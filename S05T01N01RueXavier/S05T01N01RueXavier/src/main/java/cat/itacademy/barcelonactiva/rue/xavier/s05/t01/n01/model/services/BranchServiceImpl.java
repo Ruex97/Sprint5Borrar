@@ -22,7 +22,7 @@ public class BranchServiceImpl implements IBranchService {
 
     @Override
     public List<BranchDTO> getAllBranches() {
-        return repository.findAll().stream().map(x -> entityToDto(x)).collect(Collectors.toList());
+        return repository.findAll().stream().map(x -> entityToDto2(x)).collect(Collectors.toList());
     }
 
     @Override
@@ -32,7 +32,7 @@ public class BranchServiceImpl implements IBranchService {
 
         if(branchData.isPresent()) {
             Branch branch = branchData.get();
-            branchDTO = entityToDto(branch);
+            branchDTO = entityToDto2(branch);
         } else {
             branchDTO = null;
         }
@@ -41,8 +41,8 @@ public class BranchServiceImpl implements IBranchService {
     }
 
     @Override
-    public void deleteBranch(BranchDTO branchDTO) {
-        repository.delete(dtoToEntity(branchDTO));
+    public void deleteBranch(long id) {
+        repository.deleteById(id);
     }
 
     @Override
@@ -57,14 +57,14 @@ public class BranchServiceImpl implements IBranchService {
 
             return repository.save(myBranch);
         } else {
-            return repository.save(branch);
+            return null;
         }
     }
 
 
     @Override
     public Branch addBranch(BranchDTO branchDto) {
-        Branch branch = dtoToEntity(branchDto);
+        Branch branch = dtoToEntity2(branchDto);
         return repository.save(branch);
     }
 
@@ -81,6 +81,7 @@ public class BranchServiceImpl implements IBranchService {
 
     public BranchDTO entityToDto2(Branch branch) {
         BranchDTO myBranchDTO = modelMapper.map(branch, BranchDTO.class);
+        myBranchDTO.setTypeBranch(myBranchDTO.checkCountry());
         return myBranchDTO;
     }
 
