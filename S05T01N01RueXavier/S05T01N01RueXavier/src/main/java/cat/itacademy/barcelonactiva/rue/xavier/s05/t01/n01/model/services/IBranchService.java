@@ -5,12 +5,12 @@ import cat.itacademy.barcelonactiva.rue.xavier.s05.t01.n01.model.dto.BranchDTO;
 
 import java.util.List;
 
-public interface IBranchOfficeService {
+public interface IBranchService {
 
     public List<BranchDTO> getAllBranches();
     public BranchDTO getBranchById(long id);
 
-    public void deleteBranch(long id);
+    public void deleteBranch(BranchDTO branchDTO);
     public Branch updateBranch(long id, Branch branch);
     public Branch addBranch (BranchDTO branchOffice);
 

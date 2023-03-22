@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class BranchOfficeServiceImpl implements IBranchOfficeService{
+public class BranchServiceImpl implements IBranchService {
 
     @Autowired
     BranchOfficeRepository repository;
@@ -38,18 +38,11 @@ public class BranchOfficeServiceImpl implements IBranchOfficeService{
         }
 
         return branchDTO;
-
-
     }
 
     @Override
-    public void deleteBranch(long id) {
-        Optional<Branch> branchData = repository.findById(id);
-
-        if(branchData.isPresent()) {
-            repository.deleteById(id);
-        }
-
+    public void deleteBranch(BranchDTO branchDTO) {
+        repository.delete(dtoToEntity(branchDTO));
     }
 
     @Override
@@ -81,8 +74,7 @@ public class BranchOfficeServiceImpl implements IBranchOfficeService{
         branchdto.setId(branch.getId());
         branchdto.setName(branch.getName());
         branchdto.setCountry(branch.getCountry());
-
-       branchdto.setTypeBranch(branchdto.checkCountry());
+        branchdto.setTypeBranch(branchdto.checkCountry());
 
         return branchdto;
     }
