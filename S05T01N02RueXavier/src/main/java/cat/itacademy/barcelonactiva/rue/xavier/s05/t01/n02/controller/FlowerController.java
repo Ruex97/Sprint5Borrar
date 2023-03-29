@@ -57,7 +57,7 @@ public class FlowerController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteFruit(@PathVariable("id") long id) {
+    public ResponseEntity<HttpStatus> deleteFlower(@PathVariable("id") long id) {
         try {
             flowerService.deleteFlower(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -67,7 +67,7 @@ public class FlowerController {
     }
 
     @GetMapping("/getOne/{id}")
-    public ResponseEntity<FlowerDto> getFruitById(@PathVariable("id") long id) {
+    public ResponseEntity<FlowerDto> getFlowerById(@PathVariable("id") long id) {
         FlowerDto myFlower = flowerService.getFlowerById(id);
 
         if (myFlower != null) {
